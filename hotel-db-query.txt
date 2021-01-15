@@ -1,0 +1,60 @@
+1) Seleziona tutti gli ospiti che sono stati identificati con la carta d'identità:
+
+SELECT *
+FROM ospiti
+WHERE document_type = 'CI'
+
+2) Seleziona tutti gli ospiti che sono nati dopo il 1988: 
+
+SELECT * 
+FROM ospiti 
+WHERE date_of_birth > '1988-12-31'
+
+3) Seleziona tutti gli ospiti che hanno più di 20 anni (al momento dell'esecuzione della query): 
+
+SELECT *, TIMESTAMPDIFF(YEAR, date_of_birth, CURRENT_TIMESTAMP) as age 
+FROM ospiti 
+WHERE TIMESTAMPDIFF(YEAR, date_of_birth, CURRENT_TIMESTAMP) > 20
+
+► GROUP BY:
+
+1. Conta gli ospiti raggruppandoli per anno di nascita
+
+SELECT COUNT(*), YEAR(date_of_birth)
+FROM ospiti
+GROUP BY YEAR(date_of_birth)
+
+2. Somma i prezzi dei pagamenti raggruppandoli per status
+
+SELECT status, SUM(price)
+FROM pagamenti
+GROUP BY status
+
+3. Conta quante volte è stata prenotata ogni stanza
+
+SELECT stanza_id, COUNT(id)
+FROM prenotazioni
+GROUP BY stanza_id
+
+► JOIN:
+
+1. Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
+
+2. Stampare tutti gli ospiti per ogni prenotazione
+
+SELECT name, lastname, prenotazioni_has_ospiti.prenotazione_id
+FROM ospiti
+JOIN prenotazioni_has_ospiti
+ON ospiti.id = prenotazioni_has_ospiti.ospite_id
+
+3. Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazione fatte a Maggio 2018
+
+4. Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
+
+5. Prendi i dati di fatturazione per la prenotazione con id=7
+
+SELECT name, lastname, address
+FROM paganti
+JOIN pagamenti
+ON pagamenti.pagante_id = paganti.id
+WHERE pagamenti.prenotazione_id = 7
